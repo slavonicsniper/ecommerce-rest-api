@@ -3,6 +3,8 @@ var router = express.Router();
 // require db adapter file
 const db = require('../db')
 
+const passport = require('passport')
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -17,6 +19,10 @@ router.post('/register', (req, res, next) => {
     }
     res.status(201).send(`User ${username} registered.`)
   })
+})
+
+router.post('/login', passport.authenticate('local'), (req, res, next) => {
+  res.status(200).send('Authenticated.')
 })
 
 module.exports = router;
