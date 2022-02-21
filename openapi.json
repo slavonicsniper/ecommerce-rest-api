@@ -1,0 +1,754 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ecommerce Rest API",
+    "version": "1.0.0",
+    "description": "Standard api's for an ecommerce app"
+  },
+  "paths": {
+    "/register": {
+      "summary": "Register a new user",
+      "post": {
+        "summary": "Creates a new user",
+        "description": "Insert a new user entry into the users table",
+        "operationId": "register",
+        "requestBody": {
+          "description": "User to register",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registration"
+              },
+              "examples": {
+                "user": {
+                  "summary": "An example of a user",
+                  "value": {
+                    "username": "j.smart",
+                    "first_name": "John",
+                    "last_name": "Smart",
+                    "email": "j.smart@ecommerce.com",
+                    "password": "Start123!"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "text/plain; charset=utf-8": {
+                "examples": {
+                  "success": {
+                    "value": "User j.smart registered."
+                  }
+                }
+              }
+            },
+            "description": "User registered"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "register"
+        ]
+      }
+    },
+    "/login": {
+      "summary": "Authenticate a user",
+      "post": {
+        "summary": "User login",
+        "description": "check the provided username and password with the one stored in the users table",
+        "operationId": "login",
+        "requestBody": {
+          "description": "user login",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "user": {
+                  "summary": "An example of a user login credentials",
+                  "value": {
+                    "username": "j.smart",
+                    "password": "Start123!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain; charset=utf-8": {
+                "examples": {
+                  "authenticated": {
+                    "value": "Authenticated."
+                  }
+                }
+              }
+            },
+            "description": "User authenticated"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "login"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "summary": "Get a user profile",
+      "get": {
+        "summary": "display user profile",
+        "description": "get user information from the users table by username",
+        "operationId": "get_user_profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "user": {
+                    "value": "{\n    \"username\": \"j.smart\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Smart\",\n    \"email\": \"j.smart@ecommerce.com\",\n    \"password\": \"Start123!\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "User profile"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "show user profile"
+        ]
+      },
+      "put": {
+        "summary": "update user profile",
+        "description": "update user information in the users table",
+        "operationId": "update_user_profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserId"
+          }
+        ],
+        "requestBody": {
+          "description": "Update user profile",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              },
+              "examples": {
+                "fullUserUpdate": {
+                  "summary": "Full user update",
+                  "value": {
+                    "first_name": "NewName",
+                    "last_name": "NewLastName",
+                    "email": "newEmail@ecommerce.com",
+                    "password": "newPassword"
+                  }
+                },
+                "partialUserUpdate": {
+                  "summary": "Partial user update",
+                  "value": {
+                    "first_name": "NewName",
+                    "last_name": "NewLastName"
+                  }
+                },
+                "singleColUserUpdate": {
+                  "summary": "Update user password",
+                  "value": {
+                    "password": "newPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "user": {
+                    "value": "{\n    \"username\": \"j.smart\",\n    \"first_name\": \"Mathew\",\n    \"last_name\": \"Welcome\",\n    \"email\": \"j.smart@ecommerce.com\",\n    \"password\": \"Start123!\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "User updated"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "update user profile"
+        ]
+      }
+    },
+    "/products": {
+      "summary": "List all products",
+      "get": {
+        "summary": "List products",
+        "description": "list rows from products table",
+        "operationId": "get_products",
+        "responses": {
+          "200": {
+            "description": "Product list",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "products": {
+                    "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"iPhone 6S\",\n        \"price\": \"$300.00\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"google pixel 5\",\n        \"price\": \"$600.00\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"QC20C\",\n        \"price\": \"$150.00\"\n    }\n]"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "list products"
+        ]
+      }
+    },
+    "/products/{id}": {
+      "summary": "List a product defined by an id",
+      "get": {
+        "summary": "list a product by id",
+        "description": "get a row from prodcuts table defined by id",
+        "operationId": "get_product_by_id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProductId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "specific product",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "product": {
+                    "value": "{\n    \"id\": 1,\n    \"name\": \"iPhone 6S\",\n    \"price\": \"$300.00\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "list a specific product"
+        ]
+      }
+    },
+    "/carts/all": {
+      "summary": "List all user carts",
+      "get": {
+        "summary": "list all user carts",
+        "description": "list all rows from database that belong to the logged in user",
+        "operationId": "get_all_carts",
+        "responses": {
+          "200": {
+            "description": "all carts",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "carts": {
+                    "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"iPhone 6S\",\n        \"price\": \"$300.00\",\n        \"qty\": 2\n    },\n    {\n        \"id\": 1,\n        \"name\": \"google pixel 5\",\n        \"price\": \"$600.00\",\n        \"qty\": 1\n    },\n    {\n        \"id\": 2,\n        \"name\": \"QC20C\",\n        \"price\": \"$150.00\",\n        \"qty\": 5\n    }\n]"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "list all carts"
+        ]
+      }
+    },
+    "/carts": {
+      "summary": "List products in the current cart",
+      "get": {
+        "summary": "list current user cart",
+        "description": "list products in the current user cart",
+        "operationId": "get_current_cart",
+        "responses": {
+          "200": {
+            "description": "current cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "carts": {
+                    "value": "[\n    {\n        \"name\": \"QC20C\",\n        \"price\": \"$150.00\",\n        \"qty\": 5\n    }\n]"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "list current cart"
+        ]
+      },
+      "post": {
+        "summary": "create a new cart",
+        "description": "insert a new entry into the carts table",
+        "operationId": "create_cart",
+        "requestBody": {
+          "description": "create cart",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart"
+              },
+              "examples": {
+                "user": {
+                  "summary": "Create cart",
+                  "value": {
+                    "username": "j.smart"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "add cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "cart": {
+                    "value": "{\n    \"id\": 3,\n    \"username\": \"j.smart\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "create cart"
+        ]
+      }
+    },
+    "/carts/items": {
+      "summary": "Add a product to a cart",
+      "post": {
+        "summary": "add a product/products to the current cart",
+        "description": "insert new rows to products_carts table by username",
+        "operationId": "add_product_to_cart",
+        "requestBody": {
+          "description": "add items to cart",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArrayOfProducts"
+              },
+              "examples": {
+                "addProductToCart": {
+                  "summary": "add product to cart",
+                  "value": [
+                    {
+                      "name": "product name",
+                      "qty": 1
+                    }
+                  ]
+                },
+                "addProductsToCart": {
+                  "summary": "add products to cart",
+                  "value": [
+                    {
+                      "name": "product name",
+                      "qty": 1
+                    },
+                    {
+                      "name": "product name",
+                      "qty": 2
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "added products to cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "item": {
+                    "value": "[\n    {\n        \"qty\": 1,\n        \"cart_id\": 3,\n        \"product_id\": 3\n    }\n]"
+                  },
+                  "items": {
+                    "value": "[\n    {\n        \"qty\": 1,\n        \"cart_id\": 3,\n        \"product_id\": 2\n    },\n    {\n        \"qty\": 2,\n        \"cart_id\": 3,\n        \"product_id\": 1\n    }\n]"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "add product to the current cart"
+        ]
+      }
+    },
+    "/carts/items/{id}": {
+      "summary": "Edit a product defined by id in the current cart",
+      "put": {
+        "summary": "edit a product in the current cart",
+        "description": "update a row in products_carts table by username",
+        "operationId": "update_product_in_cart",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProductId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProduct"
+              },
+              "examples": {
+                "partialUpdate": {
+                  "summary": "Update only quantity",
+                  "value": {
+                    "qty": 1
+                  }
+                },
+                "fullUpdate": {
+                  "summary": "Update quantity and product",
+                  "value": {
+                    "qty": 3,
+                    "product_id": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "update product in cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "updateProductInCart": {
+                    "value": "{\n    \"qty\": 5,\n    \"cart_id\": 3,\n    \"product_id\": 1\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "update product in the current cart"
+        ]
+      },
+      "delete": {
+        "summary": "delete a product from the current cart",
+        "description": "remove a row from products_carts by username",
+        "operationId": "remove_product_in_cart",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ProductId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "removed product from cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "deleteProduct": {
+                    "value": "{\n    \"qty\": 1,\n    \"cart_id\": 3,\n    \"product_id\": 2\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "remove product in cart"
+        ]
+      }
+    },
+    "/carts/checkout": {
+      "summary": "Checkout the current cart and create an order",
+      "post": {
+        "summary": "perform a checkout",
+        "description": "sum total price of the products in the cart and create a new row in orders with the sum information",
+        "operationId": "checkout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Checkout"
+              },
+              "examples": {
+                "checkout": {
+                  "value": {
+                    "card": "1234567812345678",
+                    "cvc": "123",
+                    "expiration": "02/24"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "checkout",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "checkout": {
+                    "value": "{\n    \"id\": 5,\n    \"total\": \"$600.00\",\n    \"status\": \"COMPLETE\",\n    \"cart_id\": 3\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "create an order"
+        ]
+      }
+    },
+    "/orders": {
+      "summary": "List all user orders",
+      "get": {
+        "summary": "list all user orders",
+        "description": "show all rows from orders table by username",
+        "operationId": "get_all_user_orders",
+        "responses": {
+          "200": {
+            "description": "user orders",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "orders": {
+                    "value": "[\n    {\n        \"id\": 3,\n        \"total\": \"$1,200.00\",\n        \"status\": \"COMPLETE\",\n        \"cart_id\": 1\n    },\n    {\n        \"id\": 4,\n        \"total\": \"$750.00\",\n        \"status\": \"COMPLETE\",\n        \"cart_id\": 2\n    },\n    {\n        \"id\": 5,\n        \"total\": \"$600.00\",\n        \"status\": \"COMPLETE\",\n        \"cart_id\": 3\n    }\n]"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "show user orders"
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "summary": "List an order defined by an id",
+      "get": {
+        "summary": "list a specific order by id",
+        "description": "list row from orders table by provided id",
+        "operationId": "get_order",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrderId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user specific order",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "order": {
+                    "value": "{\n    \"id\": 3,\n    \"total\": \"$1,200.00\",\n    \"status\": \"COMPLETE\",\n    \"cart_id\": 1\n}"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "list order"
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "UserId": {
+        "name": "id",
+        "in": "path",
+        "description": "The used id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ProductId": {
+        "name": "id",
+        "in": "path",
+        "description": "The product id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrderId": {
+        "name": "id",
+        "in": "path",
+        "description": "The order id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "ArrayOfProducts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "qty": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "UpdateProduct": {
+        "type": "object",
+        "properties": {
+          "qty": {
+            "type": "integer"
+          },
+          "product_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Checkout": {
+        "type": "object",
+        "properties": {
+          "card": {
+            "type": "string"
+          },
+          "cvc": {
+            "type": "string"
+          },
+          "expiration": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
