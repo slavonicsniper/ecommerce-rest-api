@@ -43,7 +43,7 @@ app.use(passport.session())
 passport.use(new LocalStrategy((user, password, done) => {
   db.query('select username, password from users where username = $1', [user], (err, result) => {
     if (err) {
-      return next(err)
+      throw err
     }
     if(result.rows.length === 0 || result.rows[0].password !== password) {
       return done(null, false, { message: 'Incorrect username or password.' })
