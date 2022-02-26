@@ -3,6 +3,8 @@ CREATE DATABASE ecommerce;
 
 \c ecommerce;
 
+-- comment the above lines when executing on a heroku psql
+
 CREATE TABLE products
 (
   id SERIAL NOT NULL,
