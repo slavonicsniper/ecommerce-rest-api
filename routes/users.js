@@ -23,7 +23,7 @@ router.put('/:id', checkAuthenticated, checkAuthUser, (req, res, next) => {
   const params = req.body
   // Generate SQL statement - using helper for dynamic parameter injection
   const condition = pgp.as.format('WHERE username = ${id} RETURNING *', { id });
-  const statement = pgp.helpers.update(params, [null], 'users') + condition;
+  const statement = pgp.helpers.update(params, null, 'users') + condition;
   db.query(statement, (err, result) => {
     if(err) {
         return next(err)

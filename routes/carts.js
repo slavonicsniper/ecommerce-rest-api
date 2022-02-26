@@ -46,7 +46,7 @@ router.post('/', checkAuthenticated, (req, res, next) => {
     if(err) {
         return next(err)
     }
-    res.status(200).send(result.rows[0])
+    res.status(201).send(result.rows[0])
   })
 })
 
@@ -62,9 +62,9 @@ router.post('/items', checkAuthenticated, async (req, res, next) => {
   }
 })
 
-router.put('/items/:productId', checkAuthenticated, async (req, res, next) => {
+router.put('/items/:id', checkAuthenticated, async (req, res, next) => {
   try {
-    const productId = req.params.productId
+    const productId = req.params.id
     const cartId = await findCartByUser(req.user.id)
     const data = req.body
     const condition = pgp.as.format('WHERE product_id = ${productId} AND cart_id = ${cartId} RETURNING *', { productId, cartId: cartId.id })
@@ -77,12 +77,12 @@ router.put('/items/:productId', checkAuthenticated, async (req, res, next) => {
   }
 })
 
-router.delete('/items/:productId', checkAuthenticated, async (req, res, next) => {
+router.delete('/items/:id', checkAuthenticated, async (req, res, next) => {
   try {
-    const productId = req.params.productId
+    const productId = req.params.id
     const cartId = await findCartByUser(req.user.id)
     const result = await db.query('delete from products_carts where product_id = $1 and cart_id = $2 returning *', [productId, cartId.id])
-    res.status(204).send(result.rows[0])
+    res.status(200).send(result.rows[0])
   } catch(err) {
     next(err)
   }
